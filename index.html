@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Árbol de KPIs / KPI Tree</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .collapsed { display: none; }
+    .search-highlight { background-color: yellow; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-7xl mx-auto p-4 md:p-6">
+    <h1 class="text-3xl font-bold mb-2" id="mainTitle">Árbol de KPIs</h1>
+    <p class="text-sm mb-6 text-gray-600" id="mainSubtitle">Visualización jerárquica de KPIs por Reunión y Canal</p>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6 items-start">
+        <div class="relative flex-grow w-full">
+            <input type="text" id="searchInput" placeholder="Buscar KPI, Canal o Reunión..." 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="clearSearch" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600" title="Limpiar búsqueda">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <button id="expandAll" class="transition hover:scale-105 ease-in-out duration-150" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Expandir Todo</button>
+            <button id="collapseAll" class="transition hover:scale-105 ease-in-out duration-150" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">Colapsar Todo</button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+            <div class="text-sm text-blue-600 font-medium">Reuniones</div>
+            <div id="countReuniones" class="text-2xl font-bold text-blue-800">0</div>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+            <div class="text-sm text-blue-600 font-medium">Canales</div>
+            <div id="countCanales" class="text-2xl font-bold text-blue-800">0</div>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+            <div class="text-sm text-blue-600 font-medium">KPIs</div>
+            <div id="countKPIs" class="text-2xl font-bold text-blue-800">0</div>
+        </div>
+    </div>
+
+    <div id="kpiTree" class="space-y-4"><div class="flex flex-wrap gap-2 mt-2"><!-- <button id="langToggle" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">ES / EN 🌐</button>
+        <!-- <button id="toggleTheme" class="transition hover:scale-105 ease-in-out duration-150" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">Modo Claro / Oscuro 🌓</button>
+        <button id="downloadPDF" class="transition hover:scale-105 ease-in-out duration-150" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Exportar a PDF 📄</button>
+    </div>
+  </div>
+
+  </html>
