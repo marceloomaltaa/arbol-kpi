@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Árbol de KPIs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .collapsed { display: none; }
+    .transition-toggle { transition: all 0.3s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-2">Árbol de KPIs</h1>
+    <p class="text-sm mb-4 text-gray-600">Visualización jerárquica de KPIs por Reunión, Canal y KPI</p>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <div class="relative flex-grow">
+            <input type="text" id="searchInput" placeholder="Buscar KPI, Canal o Reunión..." 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex gap-2">
+            <button id="expandAll" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Expandir Todo</button>
+            <button id="collapseAll" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">Colapsar Todo</button>
+        </div>
+    </div>
+
+    <div id="kpiTree" class="space-y-6"></div>
+  </div>
+
+  <script>
+    const kpiData = [{"reunion": "DOR", "canales": [{"nombre": "MODERNO", "kpis": ["Sell In Diario"]}, {"nombre": "TSP", "kpis": ["Efectividad de visita (%GPS >2min)", "% Tareas Efectivas y Tareas Completadas", "Efectividad de Venta", "Drop por vendedor", "Clientes compra", "Surtido prioritario"]}, {"nombre": "DSD", "kpis": ["Sell In Diario", "Clientes Compra", "Innovaciones", "Efectividad de Visita", "Sell In Diario", "Surtido prioritario"]}, {"nombre": "Élite", "kpis": ["Efectividad de visita (%GPS >2min)", "% Tareas Efectivas y Tareas Completadas.", "Efectividad de Venta", "Drop por vendedor", "Clientes compra", "Surtido prioritario"]}, {"nombre": "SSRR & MAY", "kpis": ["Sell In Diario", "Clientes no compra", "Efectividad de venta por categoría"]}]}, {"reunion": "WOR", "canales": [{"nombre": "MODERNO", "kpis": ["Sell Out", "Sell In", "Disponibilidad", "Surtido prioritario", "Codificaciones", "Alcances", "SOS", "Planogramas", "Extravisibilidad", "Competencia", "Data Impacto"]}, {"nombre": "TSP", "kpis": ["Sell In", "Sell Out", "Adopción digital", "Efectividad de tareas y visitas", "Innovaciones, lanzamientos y promociones", "Cobertura", "FEX", "Clientes no compra", "Cartera", "% Devoluciones", "% Fill Rate", "Rotación de personas, ausentismo y vacaciones"]}, {"nombre": "DSD", "kpis": ["Sell Out", "Clientes Compra", "Surtido prioritario", "Cartera", "FEX", "Efectividad de visita"]}, {"nombre": "Élite", "kpis": ["Sell In", "Sell Out", "Adaptación digital", "Efectividad de tareas y visitas", "Innovaciones y promociones", "Cobertura", "FEX", "Clientes no compra", "Surtido prioritario"]}, {"nombre": "SSRR & MAY", "kpis": ["Sell In", "Surtido prioritario", "Efectividad de visita BEES", "Alcances, innovaciones y lanzamientos", "Cartera", "Avance de promociones", "Rechazos y devoluciones"]}, {"nombre": "COMMERCIAL EXCELLENCE", "kpis": ["Innovaciones", "Lanzamientos", "OSA", "Actividades Promocionales"]}, {"nombre": "CDT", "kpis": ["Innovaciones", "Lanzamientos", "Promociones"]}, {"nombre": "CCC", "kpis": ["KPIs de servicio", "Proyectos"]}, {"nombre": "SRM", "kpis": ["Proyectos", "Precios AAA SKUs"]}, {"nombre": "DPC", "kpis": ["Digitalización", "Proyectos"]}]}, {"reunion": "MOR", "canales": [{"nombre": "MODERNO", "kpis": ["Sell Out", "Sell In", "Market Share", "DOH", "e-commerce"]}, {"nombre": "TSP", "kpis": ["Sell In", "Sell Out", "Adopción Digital", "Palancas Comerciales", "FEX", "Clients NO compra", "Maestra Clientes y # Vendedores", "Fill Rate", "DOH", "Cartera", "Surtido prioritario"]}, {"nombre": "DSD", "kpis": ["Sell In", "Clientes Compra", "FEX", "Drop Factura"]}, {"nombre": "Élite", "kpis": ["Sell In", "Sell Out", "Adaptación Digital", "Palancas Comerciales", "FEX", "Clientes no compra", "RTM (Maestra Clientes, # Vendedores)", "Tiempo de emisión de N/C rechazo", "Tiempo de emisión N/C devoluciones", "Surtido prioritario"]}, {"nombre": "SSRR & MAY", "kpis": ["Sell In", "Sell Out", "DOH", "Clientes compra", "Catera", "FEX"]}, {"nombre": "COMMERCIAL EXCELLENCE", "kpis": ["Innovaciones", "Lanzamientos", "SOS", "OSA", "FEX"]}, {"nombre": "CCC", "kpis": ["Proyectos"]}, {"nombre": "SRM", "kpis": ["NNS / KG", "Análisis de Inversión"]}, {"nombre": "DPC", "kpis": ["Digitalización"]}]}];
+    const tree = document.getElementById("kpiTree");
+
+    function createCollapsible(title, count, level = "reunion") {
+      const header = document.createElement("button");
+      header.className = "w-full text-left px-4 py-2 font-bold rounded-t flex justify-between items-center " +
+                         (level === "reunion" ? "bg-blue-700 text-white" :
+                          level === "canal" ? "bg-blue-200 text-blue-900 font-semibold" :
+                          "bg-blue-100 text-sm");
+      header.innerHTML = `<span>{title}</span><span class="text-xs px-2 py-0.5 rounded-full">{count}</span>`;
+      return header;
+    }
+
+    function renderTree() {
+      kpiData.forEach(reunion => {
+        const container = document.createElement("div");
+        container.className = "rounded border border-blue-300 overflow-hidden";
+
+        const reunionContent = document.createElement("div");
+        reunionContent.className = "bg-blue-100 space-y-3 px-4 py-4";
+
+        reunion.canales.forEach(canal => {
+          const canalWrapper = document.createElement("div");
+          canalWrapper.className = "rounded border border-blue-100 bg-blue-50";
+
+          const kpiList = document.createElement("ul");
+          kpiList.className = "list-disc ml-6 px-2 py-2 bg-white";
+
+          canal.kpis.forEach(kpi => {
+            const li = document.createElement("li");
+            li.className = "text-gray-800 text-sm";
+            li.textContent = kpi;
+            kpiList.appendChild(li);
+          });
+
+          const canalContent = document.createElement("div");
+          canalContent.appendChild(kpiList);
+          canalContent.className = "collapsed";
+
+          const canalHeader = createCollapsible(canal.nombre, canal.kpis.length + " KPIs", "canal");
+          canalHeader.onclick = () => canalContent.classList.toggle("collapsed");
+
+          canalWrapper.appendChild(canalHeader);
+          canalWrapper.appendChild(canalContent);
+          reunionContent.appendChild(canalWrapper);
+        });
+
+        const reunionHeader = createCollapsible(reunion.reunion, reunion.canales.length + " canales", "reunion");
+        const reunionSection = document.createElement("div");
+        reunionSection.className = "collapsed";
+        reunionSection.appendChild(reunionContent);
+
+        reunionHeader.onclick = () => reunionSection.classList.toggle("collapsed");
+
+        container.appendChild(reunionHeader);
+        container.appendChild(reunionSection);
+        tree.appendChild(container);
+      });
+    }
+
+    renderTree();
+
+    document.getElementById("expandAll").onclick = () => {
+      document.querySelectorAll(".collapsed").forEach(el => el.classList.remove("collapsed"));
+    };
+    document.getElementById("collapseAll").onclick = () => {
+      document.querySelectorAll("#kpiTree > div > div").forEach(el => el.classList.add("collapsed"));
+      document.querySelectorAll("#kpiTree ul").forEach(el => el.parentElement.classList.add("collapsed"));
+    };
+  
+    document.getElementById("searchInput").addEventListener("input", function() {
+      const term = this.value.toLowerCase().trim();
+      document.querySelectorAll("li, button span").forEach(el => {
+        const original = el.dataset.originalText || el.textContent;
+        el.dataset.originalText = original;
+        const text = original.toLowerCase();
+        if (term && text.includes(term)) {
+          el.innerHTML = original.replace(new RegExp(`(${term})`, 'gi'), "<mark>$1</mark>");
+          let parent = el.closest("div.collapsed");
+          while (parent) {
+            parent.classList.remove("collapsed");
+            parent = parent.parentElement.closest("div.collapsed");
+          }
+        } else {
+          el.innerHTML = original;
+        }
+      });
+    });
+
+</script>
+</body>
+</html>
