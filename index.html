@@ -1,66 +1,56 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Árbol de KPIs</title>
-  <style>
-    ul, #kpiTree {
-      list-style-type: none;
-      padding-left: 1em;
-    }
-    .caret {
-      cursor: pointer;
-      user-select: none;
-    }
-    .caret::before {
-      content: "\25B6";
-      color: black;
-      display: inline-block;
-      margin-right: 6px;
-    }
-    .caret-down::before {
-      transform: rotate(90deg);
-    }
-    .nested {
-      display: none;
-    }
-    .active {
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Árbol de KPIs</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 20px;
+  position: relative;
+}
+
+ul ul::before {
+  content: '';
+  border-left: 1px solid #ccc;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+li {
+  margin: 0;
+  padding: 10px 5px 0 5px;
+  position: relative;
+}
+
+li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-top: 1px solid #ccc;
+  width: 20px;
+  height: 20px;
+}
+
+li span {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #f0f4f8;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+</style>
 </head>
 <body>
-<div id="kpiTree">
-<ul>
-<li><span class='caret'>DOR</span><div class='nested'><ul>
-<li><span class='caret'>MODERNO</span><div class='nested'><ul>
-<li>Sell In Diario</li>
-</ul></div></li>
-<li><span class='caret'>TSP</span><div class='nested'><ul>
-<li>Efectividad de visita (%GPS &gt;2min) </li>
-<li>% Tareas Efectivas y Tareas Completadas</li>
-<li>Efectividad de Venta</li>
-<li>Drop por vendedor</li>
-<li>Clientes compra</li>
-<li>Surtido prioritario</li>
-</ul></div></li>
-<li><span class='caret'>DSD</span><div class='nested'><ul>
-<li>Sell In Diario</li>
-<li>Clientes Compra</li>
-<li>Innovaciones</li>
-</ul></div></li>
-</ul></div></li>
-</ul>
-</div>
-
-<script>
-  var toggler = document.getElementsByClassName("caret");
-  for (var i = 0; i < toggler.length; i++) {
-    toggler[i].addEventListener("click", function() {
-      this.parentElement.querySelector(".nested").classList.toggle("active");
-      this.classList.toggle("caret-down");
-    });
-  }
-</script>
+<h2>Árbol de KPIs</h2>
+<ul><li><span>DOR</span><ul><li><span>MODERNO</span><ul><li><span>Sell In Diario</span></li></ul></li><li><span>TSP</span><ul><li><span>Efectividad de visita (%GPS >2min)</span></li><li><span>% Tareas Efectivas y Tareas Completadas</span></li><li><span>Efectividad de Venta</span></li><li><span>Drop por vendedor</span></li><li><span>Clientes compra</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>DSD</span><ul><li><span>Sell In Diario</span></li><li><span>Clientes Compra</span></li><li><span>Innovaciones</span></li><li><span>Efectividad de Visita</span></li><li><span>Sell In Diario</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>Élite</span><ul><li><span>Efectividad de visita (%GPS >2min)</span></li><li><span>% Tareas Efectivas y Tareas Completadas.</span></li><li><span>Efectividad de Venta</span></li><li><span>Drop por vendedor</span></li><li><span>Clientes compra</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>SSRR & MAY</span><ul><li><span>Sell In Diario</span></li><li><span>Clientes no compra</span></li><li><span>Efectividad de venta por categoría</span></li></ul></li></ul></li><li><span>WOR</span><ul><li><span>MODERNO</span><ul><li><span>Sell Out</span></li><li><span>Sell In</span></li><li><span>Disponibilidad</span></li><li><span>Surtido prioritario</span></li><li><span>Codificaciones</span></li><li><span>Alcances</span></li><li><span>SOS</span></li><li><span>Planogramas</span></li><li><span>Extravisibilidad</span></li><li><span>Competencia</span></li><li><span>Data Impacto</span></li></ul></li><li><span>TSP</span><ul><li><span>Sell In</span></li><li><span>Sell Out</span></li><li><span>Adopción digital</span></li><li><span>Efectividad de tareas y visitas</span></li><li><span>Innovaciones, lanzamientos y promociones</span></li><li><span>Cobertura</span></li><li><span>FEX</span></li><li><span>Clientes no compra</span></li><li><span>Cartera</span></li><li><span>% Devoluciones</span></li><li><span>% Fill Rate</span></li><li><span>Rotación de personas, ausentismo y vacaciones</span></li></ul></li><li><span>DSD</span><ul><li><span>Sell Out</span></li><li><span>Clientes Compra</span></li><li><span>Surtido prioritario</span></li><li><span>Cartera</span></li><li><span>FEX</span></li><li><span>Efectividad de visita</span></li></ul></li><li><span>Élite</span><ul><li><span>Sell In</span></li><li><span>Sell Out</span></li><li><span>Adaptación digital</span></li><li><span>Efectividad de tareas y visitas</span></li><li><span>Innovaciones y promociones</span></li><li><span>Cobertura</span></li><li><span>FEX</span></li><li><span>Clientes no compra</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>SSRR & MAY</span><ul><li><span>Sell In</span></li><li><span>Surtido prioritario</span></li><li><span>Efectividad de visita BEES</span></li><li><span>Alcances, innovaciones y lanzamientos</span></li><li><span>Cartera</span></li><li><span>Avance de promociones</span></li><li><span>Rechazos y devoluciones</span></li></ul></li><li><span>COMMERCIAL EXCELLENCE</span><ul><li><span>Innovaciones</span></li><li><span>Lanzamientos</span></li><li><span>OSA</span></li><li><span>Actividades Promocionales</span></li></ul></li><li><span>CDT</span><ul><li><span>Innovaciones</span></li><li><span>Lanzamientos</span></li><li><span>Promociones</span></li></ul></li><li><span>CCC</span><ul><li><span>KPIs de servicio</span></li><li><span>Proyectos</span></li></ul></li><li><span>SRM</span><ul><li><span>Proyectos</span></li><li><span>Precios AAA SKUs</span></li></ul></li><li><span>DPC</span><ul><li><span>Digitalización</span></li><li><span>Proyectos</span></li></ul></li></ul></li><li><span>MOR</span><ul><li><span>MODERNO</span><ul><li><span>Sell Out</span></li><li><span>Sell In</span></li><li><span>Market Share</span></li><li><span>DOH</span></li><li><span>e-commerce</span></li></ul></li><li><span>TSP</span><ul><li><span>Sell In</span></li><li><span>Sell Out</span></li><li><span>Adopción Digital</span></li><li><span>Palancas Comerciales</span></li><li><span>FEX</span></li><li><span>Clients NO compra</span></li><li><span>Maestra Clientes y # Vendedores</span></li><li><span>Fill Rate</span></li><li><span>DOH</span></li><li><span>Cartera</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>DSD</span><ul><li><span>Sell In</span></li><li><span>Clientes Compra</span></li><li><span>FEX</span></li><li><span>Drop Factura</span></li></ul></li><li><span>Élite</span><ul><li><span>Sell In</span></li><li><span>Sell Out</span></li><li><span>Adaptación Digital</span></li><li><span>Palancas Comerciales</span></li><li><span>FEX</span></li><li><span>Clientes no compra</span></li><li><span>RTM (Maestra Clientes, # Vendedores)</span></li><li><span>Tiempo de emisión de N/C rechazo</span></li><li><span>Tiempo de emisión N/C devoluciones</span></li><li><span>Surtido prioritario</span></li></ul></li><li><span>SSRR & MAY</span><ul><li><span>Sell In</span></li><li><span>Sell Out</span></li><li><span>DOH</span></li><li><span>Clientes compra</span></li><li><span>Catera</span></li><li><span>FEX</span></li></ul></li><li><span>COMMERCIAL EXCELLENCE</span><ul><li><span>Innovaciones</span></li><li><span>Lanzamientos</span></li><li><span>SOS</span></li><li><span>OSA</span></li><li><span>FEX</span></li></ul></li><li><span>CCC</span><ul><li><span>Proyectos</span></li></ul></li><li><span>SRM</span><ul><li><span>NNS / KG</span></li><li><span>Análisis de Inversión</span></li></ul></li><li><span>DPC</span><ul><li><span>Digitalización</span></li></ul></li></ul></li></ul>
 </body>
 </html>
