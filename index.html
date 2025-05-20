@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Árbol de KPIs</title>
+  <style>
+    ul, #kpiTree {
+      list-style-type: none;
+      padding-left: 1em;
+    }
+    .caret {
+      cursor: pointer;
+      user-select: none;
+    }
+    .caret::before {
+      content: "\25B6";
+      color: black;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    .caret-down::before {
+      transform: rotate(90deg);
+    }
+    .nested {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div id="kpiTree">
+<ul>
+<li><span class='caret'>DOR</span><div class='nested'><ul>
+<li><span class='caret'>MODERNO</span><div class='nested'><ul>
+<li>Sell In Diario</li>
+</ul></div></li>
+<li><span class='caret'>TSP</span><div class='nested'><ul>
+<li>Efectividad de visita (%GPS &gt;2min) </li>
+<li>% Tareas Efectivas y Tareas Completadas</li>
+<li>Efectividad de Venta</li>
+<li>Drop por vendedor</li>
+<li>Clientes compra</li>
+<li>Surtido prioritario</li>
+</ul></div></li>
+<li><span class='caret'>DSD</span><div class='nested'><ul>
+<li>Sell In Diario</li>
+<li>Clientes Compra</li>
+<li>Innovaciones</li>
+</ul></div></li>
+</ul></div></li>
+</ul>
+</div>
+
+<script>
+  var toggler = document.getElementsByClassName("caret");
+  for (var i = 0; i < toggler.length; i++) {
+    toggler[i].addEventListener("click", function() {
+      this.parentElement.querySelector(".nested").classList.toggle("active");
+      this.classList.toggle("caret-down");
+    });
+  }
+</script>
+</body>
+</html>
